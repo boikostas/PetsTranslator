@@ -14,6 +14,14 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             LinearGradient(colors: [.gradientTop, .gradientBottom], startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
+            
+            switch selectedTab {
+            case .translator:
+                TranslatorScreenView()
+            case .settings:
+                SettingsScreenView()
+            }
         }
         .overlay(alignment: .bottom) {
             ZStack {
@@ -39,9 +47,9 @@ struct ContentView: View {
                     .tint(.appTint)
                 }
             }
-            .padding(.bottom, 46)
+            .padding(.bottom, 16)
         }
-        .ignoresSafeArea()
+        
     }
 }
 
