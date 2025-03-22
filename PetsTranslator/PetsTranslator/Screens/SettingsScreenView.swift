@@ -12,6 +12,7 @@ struct SettingsScreenView: View {
         VStack {
             Text(Tab.settings.title)
                 .font(.customTitle)
+                .foregroundStyle(.appTint)
             
             Spacer()
         }

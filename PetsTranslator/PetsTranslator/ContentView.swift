@@ -13,8 +13,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(colors: [.gradientTop, .gradientBottom], startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
+            gradient
             
             switch selectedTab {
             case .translator:
@@ -24,32 +23,41 @@ struct ContentView: View {
             }
         }
         .overlay(alignment: .bottom) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.white)
-                    .frame(width: 216, height: 82)
-                
-                HStack(spacing: 42) {
-                    Button {
-                        selectedTab = .translator
-                    } label: {
-                        TabView(tab: .translator)
-                        .opacity(selectedTab == .translator ? 1 : 0.3)
-                    }
-                    .tint(.appTint)
-                    
-                    Button {
-                        selectedTab = .settings
-                    } label: {
-                        TabView(tab: .settings)
-                        .opacity(selectedTab == .settings ? 1 : 0.3)
-                    }
-                    .tint(.appTint)
-                }
-            }
-            .padding(.bottom, 16)
+            tabBar
         }
         
+    }
+    
+    private var gradient: some View {
+        LinearGradient(colors: [.gradientTop, .gradientBottom], startPoint: .top, endPoint: .bottom)
+            .ignoresSafeArea()
+    }
+    
+    private var tabBar: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.white)
+                .frame(width: 216, height: 82)
+            
+            HStack(spacing: 42) {
+                Button {
+                    selectedTab = .translator
+                } label: {
+                    TabView(tab: .translator)
+                    .opacity(selectedTab == .translator ? 1 : 0.3)
+                }
+                .tint(.appTint)
+                
+                Button {
+                    selectedTab = .settings
+                } label: {
+                    TabView(tab: .settings)
+                    .opacity(selectedTab == .settings ? 1 : 0.3)
+                }
+                .tint(.appTint)
+            }
+        }
+        .padding(.bottom, 16)
     }
 }
 

@@ -13,6 +13,7 @@ struct TranslatorScreenView: View {
         VStack {
             Text(Tab.translator.title)
                 .font(.customTitle)
+                .foregroundStyle(.appTint)
             
             Spacer()
         }
