@@ -65,7 +65,7 @@ struct SettingsScreenView: View {
         case .restorePurchases:
             Text("Purchase")
         case .privacyPolicy:
-            Text("Privacy Policy")
+            PrivacyPolicyScreenView()
         case .termsOfUse:
             Text("Terms of Use")
         }
