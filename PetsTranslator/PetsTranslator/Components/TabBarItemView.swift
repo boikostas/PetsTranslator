@@ -1,13 +1,13 @@
 //
-//  TabView.swift
+//  TabBarItemView.swift
 //  PetsTranslator
 //
-//  Created by Stas Boiko on 3/21/25.
+//  Created by Stas Boiko on 3/22/25.
 //
 
 import SwiftUI
 
-struct TabView: View {
+struct TabBarItemView: View {
     
     var tab: Tab
     

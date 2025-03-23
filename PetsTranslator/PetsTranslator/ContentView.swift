@@ -13,7 +13,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            gradient
+            BackgroundGradient()
             
             switch selectedTab {
             case .translator:
@@ -23,41 +23,8 @@ struct ContentView: View {
             }
         }
         .overlay(alignment: .bottom) {
-            tabBar
+            TabBarView(selectedTab: $selectedTab)
         }
-        
-    }
-    
-    private var gradient: some View {
-        LinearGradient(colors: [.gradientTop, .gradientBottom], startPoint: .top, endPoint: .bottom)
-            .ignoresSafeArea()
-    }
-    
-    private var tabBar: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white)
-                .frame(width: 216, height: 82)
-            
-            HStack(spacing: 42) {
-                Button {
-                    selectedTab = .translator
-                } label: {
-                    TabView(tab: .translator)
-                    .opacity(selectedTab == .translator ? 1 : 0.3)
-                }
-                .tint(.appTint)
-                
-                Button {
-                    selectedTab = .settings
-                } label: {
-                    TabView(tab: .settings)
-                    .opacity(selectedTab == .settings ? 1 : 0.3)
-                }
-                .tint(.appTint)
-            }
-        }
-        .padding(.bottom, 16)
     }
 }
 

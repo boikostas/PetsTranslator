@@ -2,7 +2,7 @@
 //  Tab.swift
 //  PetsTranslator
 //
-//  Created by Stas Boiko on 3/21/25.
+//  Created by Stas Boiko on 3/22/25.
 //
 
 import SwiftUI
@@ -14,18 +14,18 @@ enum Tab {
     var title: String {
         switch self {
         case .translator:
-            return "Translator"
+            "Translator"
         case .settings:
-            return "Settings"
+            "Settings"
         }
     }
     
     var icon: Image {
         switch self {
         case .translator:
-            return Image(.translatorTabIcon)
+            Image(.translatorTabIcon)
         case .settings:
-            return Image(.settingsTabIcon)
+            Image(.settingsTabIcon)
         }
     }
 }
