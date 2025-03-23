@@ -14,8 +14,7 @@ enum CharacterType: String {
 
 struct TranslatorScreenView: View {
     
-    @State private var selectedPet: Pet = .cat
-    @State private var translateFrom: CharacterType = .human
+    @EnvironmentObject private var viewModel: TranslatorViewModel
     
     var body: some View {
         VStack {
@@ -28,8 +27,8 @@ struct TranslatorScreenView: View {
         }
         .foregroundStyle(.appTint)
         .padding(.vertical, 12)
-        .animation(.easeInOut, value: selectedPet)
-        .animation(.smooth(duration: 0.1), value: translateFrom) 
+        .animation(.easeInOut, value: viewModel.selectedPet)
+        .animation(.smooth(duration: 0.1), value: viewModel.translateFrom)
     }
     
     private var title: some View {
@@ -40,15 +39,15 @@ struct TranslatorScreenView: View {
     
     private var swapCharactersSection: some View {
         HStack(spacing: 8) {
-            Text(translateFrom == .human ? CharacterType.human.rawValue : CharacterType.pet.rawValue)
+            Text(viewModel.translateFrom == .human ? CharacterType.human.rawValue : CharacterType.pet.rawValue)
                 .frame(width: 135, height: 61)
             
             Button {
-                switch translateFrom {
+                switch viewModel.translateFrom {
                 case .human:
-                    translateFrom = .pet
+                    viewModel.translateFrom = .pet
                 case .pet:
-                    translateFrom = .human
+                    viewModel.translateFrom = .human
                 }
             } label: {
                 Image(.arrowSwapIcon)
@@ -56,7 +55,7 @@ struct TranslatorScreenView: View {
                     .frame(width: 24, height: 24)
             }
             
-            Text(translateFrom == .human ? CharacterType.pet.rawValue : CharacterType.human.rawValue)
+            Text(viewModel.translateFrom == .human ? CharacterType.pet.rawValue : CharacterType.human.rawValue)
                 .frame(width: 135, height: 61)
         }
         .font(.customMedium)
@@ -93,17 +92,17 @@ struct TranslatorScreenView: View {
                 
                 VStack(spacing: 12){
                     Button {
-                        selectedPet = .cat
+                        viewModel.selectedPet = .cat
                     } label: {
                         PetTileView(pet: .cat)
-                            .opacity(selectedPet == .cat ? 1 : 0.5)
+                            .opacity(viewModel.selectedPet == .cat ? 1 : 0.5)
                     }
                     
                     Button {
-                        selectedPet = .dog
+                        viewModel.selectedPet = .dog
                     } label: {
                         PetTileView(pet: .dog)
-                            .opacity(selectedPet == .dog ? 1 : 0.5)
+                            .opacity(viewModel.selectedPet == .dog ? 1 : 0.5)
                     }
                 }
                 .padding(.vertical, 12)
@@ -119,7 +118,7 @@ struct TranslatorScreenView: View {
     }
     
     private var petSection: some View {
-        selectedPet.icon
+        viewModel.selectedPet.icon
             .resizable()
             .frame(width: 184, height: 184)
     }
@@ -127,4 +126,5 @@ struct TranslatorScreenView: View {
 
 #Preview {
     TranslatorScreenView()
+        .environmentObject(TranslatorViewModel())
 }

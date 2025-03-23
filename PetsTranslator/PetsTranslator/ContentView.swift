@@ -11,6 +11,8 @@ struct ContentView: View {
     
     @State private var selectedTab: Tab = .translator
     
+    @StateObject private var translatorViewModel = TranslatorViewModel()
+    
     var body: some View {
         ZStack {
             BackgroundGradient()
@@ -18,6 +20,7 @@ struct ContentView: View {
             switch selectedTab {
             case .translator:
                 TranslatorScreenView()
+                    .environmentObject(translatorViewModel)
             case .settings:
                 SettingsScreenView()
             }
