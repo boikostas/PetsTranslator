@@ -19,26 +19,8 @@ struct SettingsScreenView: View {
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 20)
-        .sheet(item: $sheetToShow) {_ in
-            switch sheetToShow {
-            case .rateUs:
-                Text("Rate")
-                    .presentationDetents([.height(100)])
-            case .shareApp:
-                EmptyView()
-            case .contactUs:
-                Text("Contacts")
-                    .presentationDetents([.height(150)])
-            case .restorePurchases:
-                Text("Purchase")
-            case .privacyPolicy:
-                Text("Privacy Policy")
-            case .termsOfUse:
-                Text("Terms of Use")
-            case nil:
-                EmptyView()
-            
-            }
+        .sheet(item: $sheetToShow) { sheet in
+            buildSheetView(sheet)
         }
     }
     
@@ -60,25 +42,32 @@ struct SettingsScreenView: View {
                     }
                 } else {
                     Button {
-                        switch rowType {
-                        case .rateUs:
-                            sheetToShow = .rateUs
-                        case .shareApp:
-                            break
-                        case .contactUs:
-                            sheetToShow = .contactUs
-                        case .restorePurchases:
-                            sheetToShow = .restorePurchases
-                        case .privacyPolicy:
-                            sheetToShow = .privacyPolicy
-                        case .termsOfUse:
-                            sheetToShow = .termsOfUse
-                        }
+                        sheetToShow = rowType
                     } label: {
                         SettingsRowCell(rowType: rowType)
                     }
                 }
             }
+        }
+    }
+    
+    @ViewBuilder
+    private func buildSheetView(_ sheet: SettingsRowType) -> some View {
+        switch sheet {
+        case .rateUs:
+            Text("Rate")
+                .presentationDetents([.height(100)])
+        case .shareApp:
+            EmptyView()
+        case .contactUs:
+            Text("Contacts")
+                .presentationDetents([.height(150)])
+        case .restorePurchases:
+            Text("Purchase")
+        case .privacyPolicy:
+            Text("Privacy Policy")
+        case .termsOfUse:
+            Text("Terms of Use")
         }
     }
 }
