@@ -67,7 +67,7 @@ struct SettingsScreenView: View {
         case .privacyPolicy:
             PrivacyPolicyScreenView()
         case .termsOfUse:
-            Text("Terms of Use")
+            TermsOfUseScreenView()
         }
     }
 }

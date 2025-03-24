@@ -112,7 +112,7 @@ struct TranslatorScreenView: View {
                     .fill(.clear)
                     .frame(height: 150)
                     
-                Text("What are you doing, human?")
+                Text(viewModel.translatedText)
                     .font(.customSmall)
                     .padding(20)
             }
@@ -224,16 +224,6 @@ struct TranslatorScreenView: View {
         viewModel.selectedPet.icon
             .resizable()
             .frame(width: 184, height: 184)
-            .onTapGesture {
-                switch viewModel.screenState {
-                case .translator:
-                    viewModel.screenState = .processOfTranslation
-                case .processOfTranslation:
-                    viewModel.screenState = .result
-                case .result:
-                    viewModel.screenState = .translator
-                }
-            }
     }
 }
 
