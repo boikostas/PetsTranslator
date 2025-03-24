@@ -8,17 +8,6 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-enum TranslatorScreenState {
-    case translator
-    case processOfTranslation
-    case result
-}
-
-enum CharacterType: String {
-    case human = "HUMAN"
-    case pet = "PET"
-}
-
 struct TranslatorScreenView: View {
     
     @EnvironmentObject private var viewModel: TranslatorViewModel
@@ -54,12 +43,7 @@ struct TranslatorScreenView: View {
         case .translator:
             translatorView
         case .processOfTranslation:
-            VStack {
-                Spacer()
-                Text("Process of translation...")
-                    .font(.customMedium)
-                    .padding(.bottom, 60)
-            }
+            processOfTranslationView
         case .result:
             resultView
         }
@@ -73,12 +57,19 @@ struct TranslatorScreenView: View {
         }
     }
     
+    private var processOfTranslationView: some View {
+        VStack {
+            Spacer()
+            Text("Process of translation...")
+                .font(.customMedium)
+                .padding(.bottom, 60)
+        }
+    }
+    
     private var resultView: some View {
         VStack {
             resultTitle
-            
             resultTextSection
-            
             Spacer()
         }
     }
@@ -99,7 +90,6 @@ struct TranslatorScreenView: View {
                         Image(.closeButtonIcon)
                             .resizable()
                             .frame(width: 28, height: 28)
-                        
                     }
                     Spacer()
                 }
