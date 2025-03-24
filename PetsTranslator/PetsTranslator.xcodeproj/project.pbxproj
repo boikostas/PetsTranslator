@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		29B69C022D919B39007BF017 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 29B69C012D919B39007BF017 /* SDWebImageSwiftUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		29B69AE92D8DF06C007BF017 /* PetsTranslator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PetsTranslator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				29B69C022D919B39007BF017 /* SDWebImageSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = PetsTranslator;
 			packageProductDependencies = (
+				29B69C012D919B39007BF017 /* SDWebImageSwiftUI */,
 			);
 			productName = PetsTranslator;
 			productReference = 29B69AE92D8DF06C007BF017 /* PetsTranslator.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 29B69AE02D8DF06C007BF017;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				29B69C002D919B38007BF017 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 29B69AEA2D8DF06C007BF017 /* Products */;
 			projectDirPath = "";
@@ -269,6 +278,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PetsTranslator/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allow access to your microphone to use the app's features";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We need access to recognize sounds";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -299,6 +310,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PetsTranslator/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allow access to your microphone to use the app's features";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We need access to recognize sounds";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -339,6 +352,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		29B69C002D919B38007BF017 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		29B69C012D919B39007BF017 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 29B69C002D919B38007BF017 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 29B69AE12D8DF06C007BF017 /* Project object */;
 }

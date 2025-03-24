@@ -6,11 +6,7 @@
 //
 
 import SwiftUI
-
-enum CharacterType: String {
-    case human = "HUMAN"
-    case pet = "PET"
-}
+import SDWebImageSwiftUI
 
 struct TranslatorScreenView: View {
     
@@ -18,20 +14,114 @@ struct TranslatorScreenView: View {
     
     var body: some View {
         VStack {
-            title
-            swapCharactersSection
-            speakSection
+            buildViewAcordingToState(viewModel.screenState)
             petSection
-
-            Spacer()
         }
         .foregroundStyle(.appTint)
         .padding(.vertical, 12)
+        .padding(.bottom, 120)
         .animation(.easeInOut, value: viewModel.selectedPet)
         .animation(.smooth(duration: 0.1), value: viewModel.translateFrom)
+        .alert("Enable Microphone Access", isPresented: $viewModel.isMicrophoneAccessDenied) {
+            Button("Cancel") {}
+            
+            Button("Settings", role: .cancel) {
+                guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
+                
+                if UIApplication.shared.canOpenURL(settingsUrl) {
+                    UIApplication.shared.open(settingsUrl)
+                }
+            }
+        } message: {
+            Text("Please allow access to your mircophone to use the app’s features")
+        }
     }
     
-    private var title: some View {
+    @ViewBuilder
+    private func buildViewAcordingToState(_ state: TranslatorScreenState) -> some View {
+        switch state {
+        case .translator:
+            translatorView
+        case .processOfTranslation:
+            processOfTranslationView
+        case .result:
+            resultView
+        }
+    }
+    
+    private var translatorView: some View {
+        VStack {
+            translatorTitle
+            swapCharactersSection
+            speakSection
+        }
+    }
+    
+    private var processOfTranslationView: some View {
+        VStack {
+            Spacer()
+            Text("Process of translation...")
+                .font(.customMedium)
+                .padding(.bottom, 60)
+        }
+    }
+    
+    private var resultView: some View {
+        VStack {
+            resultTitle
+            resultTextSection
+            Spacer()
+        }
+    }
+    
+    private var resultTitle: some View {
+        Button {
+            viewModel.screenState = .translator
+        } label: {
+            ZStack {
+                Text("Result")
+                    .font(.customTitle)
+                
+                HStack {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: .infinity)
+                            .fill(.white)
+                            .frame(width: 48, height: 48)
+                        Image(.closeButtonIcon)
+                            .resizable()
+                            .frame(width: 28, height: 28)
+                    }
+                    Spacer()
+                }
+            }
+            .frame(height: 58)
+            .padding(.horizontal, 20)
+            .padding(.bottom, 90)
+        }
+    }
+    
+    private var resultTextSection: some View {
+        ZStack(alignment: .center) {
+            BubbleMassageShape()
+                .fill(.purpleTileBackground)
+                .frame(height: 250)
+                .shadow(color: .black.opacity(0.15), radius: 5, y: 4)
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.clear)
+                    .frame(height: 150)
+                    
+                Text(viewModel.translatedText)
+                    .font(.customSmall)
+                    .padding(20)
+            }
+            .offset(y: -50)
+        }
+        .padding(.horizontal, 50)
+    }
+    
+    private var translatorTitle: some View {
         Text(Tab.translator.title)
             .font(.customTitle)
             .frame(height: 58)
@@ -65,7 +155,10 @@ struct TranslatorScreenView: View {
     private var speakSection: some View {
         HStack(spacing: 35) {
             Button {
-                
+                viewModel.requestMicrophoneAccess()
+                if !viewModel.isMicrophoneAccessDenied {
+                    viewModel.startListening()
+                }
             } label: {
                 ZStack(alignment: .bottom) {
                     RoundedRectangle(cornerRadius: 16)
@@ -74,14 +167,24 @@ struct TranslatorScreenView: View {
                         .frame(width: 178)
                     
                     VStack(spacing: 24) {
-                        Image(.microphoneIcon)
-                            .resizable()
-                            .frame(width: 70, height: 70)
+                        if viewModel.isRecording {
+                            AnimatedImage(name: "recordingGIF.gif")
+                                .resizable()
+                                .frame(height: 100)
+                                .scaleEffect(2)
+                            
+                        } else {
+                            Image(.microphoneIcon)
+                                .resizable()
+                                .frame(width: 70, height: 70)
+                        }
                         
-                        Text("Start Speak")
+                        Text(viewModel.isRecording ? "Recording..." : "Start Speak")
                             .font(.customMedium)
                     }
+                    .clipped()
                     .padding(.bottom, 12)
+                    .padding(.horizontal, 20)
                 }
             }
             
