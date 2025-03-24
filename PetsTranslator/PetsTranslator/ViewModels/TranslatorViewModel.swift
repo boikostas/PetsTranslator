@@ -11,8 +11,6 @@ import SoundAnalysis
 
 class SoundClassifier: NSObject, SNResultsObserving, ObservableObject {
     
-    @Published var detectedSound: String = "Listening..."
-    
     private let audioEngine = AVAudioEngine()
     private var streamAnalyzer: SNAudioStreamAnalyzer?
     
@@ -20,8 +18,20 @@ class SoundClassifier: NSObject, SNResultsObserving, ObservableObject {
         super.init()
         setupAudioEngine()
     }
+    
+    func startRecording() {
+        do {
+            try audioEngine.start()
+        } catch {
+            print("Error starting audio engine: \(error)")
+        }
+    }
+    
+    func stopRecording() {
+        audioEngine.stop()
+    }
 
-    func setupAudioEngine() {
+   private  func setupAudioEngine() {
         let inputNode = audioEngine.inputNode
         let format = inputNode.outputFormat(forBus: 0)
         streamAnalyzer = SNAudioStreamAnalyzer(format: format)
@@ -40,11 +50,8 @@ class SoundClassifier: NSObject, SNResultsObserving, ObservableObject {
             }
             
             audioEngine.prepare()
-            try audioEngine.start()
-            
-            print("started")
         } catch {
-            print("Error starting audio engine: \(error)")
+            print("Failed sound classifier model setup: \(error)")
         }
     }
     
@@ -59,9 +66,8 @@ class SoundClassifier: NSObject, SNResultsObserving, ObservableObject {
             
             if bestClassification.confidence >= 0.999 {
                 print("Detected sound: \(bestClassification.identifier) with confidence \(bestClassification.confidence)")
-                DispatchQueue.main.async {
-                    self.detectedSound = "Detected: \(bestClassification.identifier) - \(bestClassification.confidence * 100)%"
-                }
+                
+                //send detected result
             }
         }  else {
             print("No confident classification found")
@@ -86,15 +92,20 @@ class TranslatorViewModel: ObservableObject {
     @Published var selectedPet: Pet = .cat
     @Published var translateFrom: CharacterType = .human
     
+    @Published var isRecording = false
     
+    @Published var isMicrophoneAccessDenied = false
+    
+    let soundClassifier = SoundClassifier()
+    
+    func startListening() {
+        isRecording = true
+        soundClassifier.startRecording()
+    }
     
     func requestMicrophoneAccess() {
-        AVAudioSession.sharedInstance().requestRecordPermission { granted in
-            if granted {
-                print("Microphone access granted")
-            } else {
-                print("Microphone access denied")
-            }
+        AVAudioApplication.requestRecordPermission { granted in
+            self.isMicrophoneAccessDenied = !granted
         }
     }
 }

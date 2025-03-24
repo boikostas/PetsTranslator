@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 enum CharacterType: String {
     case human = "HUMAN"
@@ -15,8 +16,6 @@ enum CharacterType: String {
 struct TranslatorScreenView: View {
     
     @EnvironmentObject private var viewModel: TranslatorViewModel
-    
-    @StateObject private var soundClassifier = SoundClassifier()
     
     var body: some View {
         VStack {
@@ -31,6 +30,19 @@ struct TranslatorScreenView: View {
         .padding(.vertical, 12)
         .animation(.easeInOut, value: viewModel.selectedPet)
         .animation(.smooth(duration: 0.1), value: viewModel.translateFrom)
+        .alert("Enable Microphone Access", isPresented: $viewModel.isMicrophoneAccessDenied) {
+            Button("Cancel") {}
+            
+            Button("Settings", role: .cancel) {
+                guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
+                
+                if UIApplication.shared.canOpenURL(settingsUrl) {
+                    UIApplication.shared.open(settingsUrl)
+                }
+            }
+        } message: {
+            Text("Please allow access to your mircophone to use the app’s features")
+        }
     }
     
     private var title: some View {
@@ -67,7 +79,10 @@ struct TranslatorScreenView: View {
     private var speakSection: some View {
         HStack(spacing: 35) {
             Button {
-//                viewModel.soundClassifier.setupAudioEngine()
+                viewModel.requestMicrophoneAccess()
+                if !viewModel.isMicrophoneAccessDenied {
+                    viewModel.startListening()
+                }
             } label: {
                 ZStack(alignment: .bottom) {
                     RoundedRectangle(cornerRadius: 16)
@@ -76,15 +91,24 @@ struct TranslatorScreenView: View {
                         .frame(width: 178)
                     
                     VStack(spacing: 24) {
-                        Image(.microphoneIcon)
-                            .resizable()
-                            .frame(width: 70, height: 70)
+                        if viewModel.isRecording {
+                            AnimatedImage(name: "recordingGIF.gif")
+                                .resizable()
+                                .frame(height: 100)
+                                .scaleEffect(2)
+                            
+                        } else {
+                            Image(.microphoneIcon)
+                                .resizable()
+                                .frame(width: 70, height: 70)
+                        }
                         
-//                        Text("Start Speak")
-                        Text(soundClassifier.detectedSound)
+                        Text(viewModel.isRecording ? "Recording..." : "Start Speak")
                             .font(.customMedium)
                     }
+                    .clipped()
                     .padding(.bottom, 12)
+                    .padding(.horizontal, 20)
                 }
             }
             
