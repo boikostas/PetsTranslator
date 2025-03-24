@@ -269,6 +269,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PetsTranslator/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allow access to your microphone to use the app's features";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We need access to recognize sounds";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -299,6 +301,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PetsTranslator/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allow access to your microphone to use the app's features";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We need access to recognize sounds";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

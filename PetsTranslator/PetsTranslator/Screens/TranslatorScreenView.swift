@@ -16,6 +16,8 @@ struct TranslatorScreenView: View {
     
     @EnvironmentObject private var viewModel: TranslatorViewModel
     
+    @StateObject private var soundClassifier = SoundClassifier()
+    
     var body: some View {
         VStack {
             title
@@ -65,7 +67,7 @@ struct TranslatorScreenView: View {
     private var speakSection: some View {
         HStack(spacing: 35) {
             Button {
-                
+//                viewModel.soundClassifier.setupAudioEngine()
             } label: {
                 ZStack(alignment: .bottom) {
                     RoundedRectangle(cornerRadius: 16)
@@ -78,7 +80,8 @@ struct TranslatorScreenView: View {
                             .resizable()
                             .frame(width: 70, height: 70)
                         
-                        Text("Start Speak")
+//                        Text("Start Speak")
+                        Text(soundClassifier.detectedSound)
                             .font(.customMedium)
                     }
                     .padding(.bottom, 12)
