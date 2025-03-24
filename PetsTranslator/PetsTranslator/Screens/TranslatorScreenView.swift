@@ -8,6 +8,12 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+enum TranslatorScreenState {
+    case translator
+    case processOfTranslation
+    case result
+}
+
 enum CharacterType: String {
     case human = "HUMAN"
     case pet = "PET"
@@ -19,15 +25,12 @@ struct TranslatorScreenView: View {
     
     var body: some View {
         VStack {
-            title
-            swapCharactersSection
-            speakSection
+            buildViewAcordingToState(viewModel.screenState)
             petSection
-
-            Spacer()
         }
         .foregroundStyle(.appTint)
         .padding(.vertical, 12)
+        .padding(.bottom, 120)
         .animation(.easeInOut, value: viewModel.selectedPet)
         .animation(.smooth(duration: 0.1), value: viewModel.translateFrom)
         .alert("Enable Microphone Access", isPresented: $viewModel.isMicrophoneAccessDenied) {
@@ -45,7 +48,90 @@ struct TranslatorScreenView: View {
         }
     }
     
-    private var title: some View {
+    @ViewBuilder
+    private func buildViewAcordingToState(_ state: TranslatorScreenState) -> some View {
+        switch state {
+        case .translator:
+            translatorView
+        case .processOfTranslation:
+            VStack {
+                Spacer()
+                Text("Process of translation...")
+                    .font(.customMedium)
+                    .padding(.bottom, 60)
+            }
+        case .result:
+            resultView
+        }
+    }
+    
+    private var translatorView: some View {
+        VStack {
+            translatorTitle
+            swapCharactersSection
+            speakSection
+        }
+    }
+    
+    private var resultView: some View {
+        VStack {
+            resultTitle
+            
+            resultTextSection
+            
+            Spacer()
+        }
+    }
+    
+    private var resultTitle: some View {
+        Button {
+            viewModel.screenState = .translator
+        } label: {
+            ZStack {
+                Text("Result")
+                    .font(.customTitle)
+                
+                HStack {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: .infinity)
+                            .fill(.white)
+                            .frame(width: 48, height: 48)
+                        Image(.closeButtonIcon)
+                            .resizable()
+                            .frame(width: 28, height: 28)
+                        
+                    }
+                    Spacer()
+                }
+            }
+            .frame(height: 58)
+            .padding(.horizontal, 20)
+            .padding(.bottom, 90)
+        }
+    }
+    
+    private var resultTextSection: some View {
+        ZStack(alignment: .center) {
+            BubbleMassageShape()
+                .fill(.purpleTileBackground)
+                .frame(height: 250)
+                .shadow(color: .black.opacity(0.15), radius: 5, y: 4)
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.clear)
+                    .frame(height: 150)
+                    
+                Text("What are you doing, human?")
+                    .font(.customSmall)
+                    .padding(20)
+            }
+            .offset(y: -50)
+        }
+        .padding(.horizontal, 50)
+    }
+    
+    private var translatorTitle: some View {
         Text(Tab.translator.title)
             .font(.customTitle)
             .frame(height: 58)
@@ -148,6 +234,16 @@ struct TranslatorScreenView: View {
         viewModel.selectedPet.icon
             .resizable()
             .frame(width: 184, height: 184)
+            .onTapGesture {
+                switch viewModel.screenState {
+                case .translator:
+                    viewModel.screenState = .processOfTranslation
+                case .processOfTranslation:
+                    viewModel.screenState = .result
+                case .result:
+                    viewModel.screenState = .translator
+                }
+            }
     }
 }
 

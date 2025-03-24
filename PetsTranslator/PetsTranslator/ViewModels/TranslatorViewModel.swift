@@ -14,6 +14,8 @@ class SoundClassifier: NSObject, SNResultsObserving, ObservableObject {
     private let audioEngine = AVAudioEngine()
     private var streamAnalyzer: SNAudioStreamAnalyzer?
     
+    var detectedPet: ((Pet) -> Void)?
+    
     override init() {
         super.init()
         setupAudioEngine()
@@ -67,7 +69,15 @@ class SoundClassifier: NSObject, SNResultsObserving, ObservableObject {
             if bestClassification.confidence >= 0.999 {
                 print("Detected sound: \(bestClassification.identifier) with confidence \(bestClassification.confidence)")
                 
-                //send detected result
+                switch bestClassification.identifier {
+                case "Cat":
+                    detectedPet?(.cat)
+                case "Dog":
+                    detectedPet?(.dog)
+                default:
+                    break
+                }
+                
             }
         }  else {
             print("No confident classification found")
@@ -83,7 +93,7 @@ class SoundClassifier: NSObject, SNResultsObserving, ObservableObject {
         let sum = (0..<frameLength).reduce(0.0) { $0 + fabsf(channelData![$1]) }
         let avgAmplitude = sum / Float(frameLength)
         
-        return avgAmplitude < 0.01 // Silence threshold
+        return avgAmplitude < 0.01
     }
 }
 
@@ -92,15 +102,37 @@ class TranslatorViewModel: ObservableObject {
     @Published var selectedPet: Pet = .cat
     @Published var translateFrom: CharacterType = .human
     
+    @Published var screenState: TranslatorScreenState = .translator
+    
     @Published var isRecording = false
     
     @Published var isMicrophoneAccessDenied = false
+    
+    @Published var translatedText = ""
     
     let soundClassifier = SoundClassifier()
     
     func startListening() {
         isRecording = true
         soundClassifier.startRecording()
+        
+        soundClassifier.detectedPet = { [weak self] pet in
+            guard let self else { return }
+            
+            DispatchQueue.main.async {
+                self.screenState = .processOfTranslation
+                self.selectedPet = pet
+                self.translatedText = "\(pet)"
+            }
+            self.stopListening()
+        }
+    }
+    
+    func stopListening() {
+        DispatchQueue.main.async {
+            self.isRecording = false
+        }
+        soundClassifier.stopRecording()
     }
     
     func requestMicrophoneAccess() {
