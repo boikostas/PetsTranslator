@@ -13,11 +13,7 @@ struct ContactUsScreenView: View {
             BackgroundGradient()
             
             VStack {
-                RoundedRectangle(cornerRadius: .infinity)
-                    .frame(width: 30, height: 5)
-                    .opacity(0.1)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top, 20)
+                SheetViewTopIndicatorView()
                 
                 Text("Contact Us")
                     .font(.customTitle)

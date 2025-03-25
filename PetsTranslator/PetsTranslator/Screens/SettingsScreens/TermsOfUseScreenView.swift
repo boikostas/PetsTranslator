@@ -13,11 +13,7 @@ struct TermsOfUseScreenView: View {
             BackgroundGradient()
                 
             VStack {
-                RoundedRectangle(cornerRadius: .infinity)
-                    .frame(width: 30, height: 5)
-                    .opacity(0.1)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top, 20)
+                SheetViewTopIndicatorView()
                 
                 ScrollView {
                     textSection
@@ -25,6 +21,7 @@ struct TermsOfUseScreenView: View {
                 .padding(.bottom, 8)
             }
         }
+        .foregroundStyle(.appTint)
     }
     
     private var textSection: some View {

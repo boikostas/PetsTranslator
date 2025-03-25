@@ -63,7 +63,8 @@ struct SettingsScreenView: View {
             ContactUsScreenView()
                 .presentationDetents([.medium])
         case .restorePurchases:
-            Text("Purchase")
+            RestorePurchasesScreenView()
+                .presentationDetents([.medium])
         case .privacyPolicy:
             PrivacyPolicyScreenView()
         case .termsOfUse:

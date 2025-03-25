@@ -24,11 +24,7 @@ struct RateUsScreenView: View {
             BackgroundGradient()
             
             VStack(spacing: 30) {
-                RoundedRectangle(cornerRadius: .infinity)
-                    .frame(width: 30, height: 5)
-                    .opacity(0.1)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top, 20)
+                SheetViewTopIndicatorView()
                 
                 Text("Rate Us")
                     .font(.customTitle)
