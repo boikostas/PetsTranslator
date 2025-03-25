@@ -20,6 +20,8 @@ class TranslatorViewModel: ObservableObject {
     
     @Published var translatedText = ""
     
+    @Published var transcriptioError: TranscriptionError?
+    
     let soundClassifier = SoundClassifier()
     let audioRecorder = AudioRecorder()
     
@@ -30,6 +32,7 @@ class TranslatorViewModel: ObservableObject {
     
     func startRecordingHumanSpeech() {
         isRecording = true
+        transcriptioError = nil
         audioRecorder.startRecording()
     }
     
@@ -40,7 +43,30 @@ class TranslatorViewModel: ObservableObject {
     
     private func listenForRecordedUrl() {
         audioRecorder.recordedUrl = { [weak self] url in
-            
+            guard let self else { return }
+            SpeechToText.transcribeAudio(url: url) { result in
+                switch result {
+                case .success(let transcriptedString):
+                    self.translatedText = transcriptedString
+                    
+                    DispatchQueue.main.async {
+                        self.screenState = .processOfTranslation
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        self.screenState = .result
+                    }
+
+                case .failure(let noSpeechDetected):
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self.transcriptioError = noSpeechDetected
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                        self.transcriptioError = nil
+                    }
+                }
+            }
         }
     }
     

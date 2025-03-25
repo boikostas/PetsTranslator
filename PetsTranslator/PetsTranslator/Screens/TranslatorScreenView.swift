@@ -20,6 +20,8 @@ struct TranslatorScreenView: View {
         .foregroundStyle(.appTint)
         .padding(.vertical, 12)
         .padding(.bottom, 120)
+        .animation(.easeInOut, value: viewModel.isRecording)
+        .animation(.easeInOut, value: viewModel.transcriptioError)
         .animation(.easeInOut, value: viewModel.selectedPet)
         .animation(.smooth(duration: 0.1), value: viewModel.translateFrom)
         .alert("Enable Microphone Access", isPresented: $viewModel.isMicrophoneAccessDenied) {
@@ -202,6 +204,13 @@ struct TranslatorScreenView: View {
                             } else if viewModel.translateFrom == .pet && viewModel.isRecording {
                                 Text("Tap to Stop Listening")
                                     .font(.customSmall)
+                            }
+                            
+                            if let error = viewModel.transcriptioError {
+                                Text(error.rawValue)
+                                    .font(.customSmall)
+                                    .foregroundStyle(.red)
+                                
                             }
                         }
                     }
