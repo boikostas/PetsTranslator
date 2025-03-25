@@ -6,13 +6,5 @@
 	<array>
 		<string>KonkhmerSleokchher-Regular.ttf</string>
 	</array>
-	<key>UILaunchScreen</key>
-	<dict>
-		<key>UILaunchScreen</key>
-		<dict>
-			<key>New item</key>
-			<string>LaunchScreen.storyboard</string>
-		</dict>
-	</dict>
 </dict>
 </plist>
