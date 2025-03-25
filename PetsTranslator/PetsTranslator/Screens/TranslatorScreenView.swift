@@ -157,7 +157,9 @@ struct TranslatorScreenView: View {
             Button {
                 viewModel.requestMicrophoneAccess()
                 if !viewModel.isMicrophoneAccessDenied {
-                    viewModel.startListening()
+                    if viewModel.translateFrom == .pet {
+                        viewModel.startListeningForPetSound()
+                    }
                 }
             } label: {
                 ZStack(alignment: .bottom) {
@@ -179,7 +181,7 @@ struct TranslatorScreenView: View {
                                 .frame(width: 70, height: 70)
                         }
                         
-                        Text(viewModel.isRecording ? "Recording..." : "Start Speak")
+                        Text(viewModel.isRecording  ? (viewModel.translateFrom == .human ? "Recording..." : "Listening...") : (viewModel.translateFrom == .human ? "Start Speak" : "Start Listen"))
                             .font(.customMedium)
                     }
                     .clipped()

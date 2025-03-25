@@ -26,12 +26,12 @@ class TranslatorViewModel: ObservableObject {
         listenForPetDetection()
     }
     
-    func startListening() {
+    func startListeningForPetSound() {
         isRecording = true
         soundClassifier.startRecording()
     }
     
-    func stopListening() {
+    func stopListeningForPetSounds() {
         DispatchQueue.main.async {
             self.isRecording = false
         }
@@ -54,7 +54,7 @@ class TranslatorViewModel: ObservableObject {
             }
         }
         
-        self.stopListening()
+        self.stopListeningForPetSounds()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.screenState = .result
