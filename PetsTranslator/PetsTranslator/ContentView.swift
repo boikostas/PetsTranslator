@@ -20,7 +20,7 @@ struct ContentView: View {
             switch selectedTab {
             case .translator:
                 TranslatorScreenView()
-                    .environmentObject(translatorViewModel)
+                    .environmentObject(translatorViewModel) 
             case .settings:
                 SettingsScreenView()
             }

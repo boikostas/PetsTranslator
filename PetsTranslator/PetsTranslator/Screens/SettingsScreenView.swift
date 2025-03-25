@@ -60,8 +60,8 @@ struct SettingsScreenView: View {
         case .shareApp:
             EmptyView()
         case .contactUs:
-            Text("Contacts")
-                .presentationDetents([.height(150)])
+            ContactUsScreenView()
+                .presentationDetents([.medium])
         case .restorePurchases:
             Text("Purchase")
         case .privacyPolicy:
