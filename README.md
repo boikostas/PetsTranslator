@@ -1,5 +1,7 @@
 # PetsTranslator
 
+This app gives us opportunity to translate human speech to pets sounds and reverse, so we could easily communicate with our pets
+
 Request to access mircrophone
 
 https://github.com/user-attachments/assets/68e7f80a-3a54-4607-b11c-5aef69c509a7
@@ -21,8 +23,7 @@ Speech not detected
 https://github.com/user-attachments/assets/6f64962e-e2c9-4105-bb22-086fb64d61a1
 
 
-Settings screen
-
+# Settings screen
 
 Rate Us screen
 
@@ -38,16 +39,17 @@ Restore Purchases screen
 
 Contact Us screen
 
-![contactUs](https://github.com/user-attachments/assets/1c603e1b-0256-494d-8e8b-864569151c11)
+![contactUs](https://github.com/user-attachments/assets/c0ef47ff-edbe-4484-ac91-6fbca73da7ca)
+
 
 Privacy Policy screen
 
-![privacy](https://github.com/user-attachments/assets/19dd1756-9058-4317-9748-f94f6156b529)
+![privacy](https://github.com/user-attachments/assets/0c1bcbc1-81b9-4153-a3f8-9ab33a518ce8)
+
 
 Terms of Use screen
 
-![terms](https://github.com/user-attachments/assets/04400d50-beb0-40d7-b17e-eaa649b02e68)
-
+![terms](https://github.com/user-attachments/assets/7bb278ab-aad6-4fcd-ab0c-12a3f9493d85)
 
 
 
