@@ -11,6 +11,29 @@ enum Pet {
     case cat
     case dog
     
+    enum Emotion {
+        case happy
+        case sad
+        case angry
+        case hungry
+        case defaultEmotion
+        
+        var relevantWords: [String] {
+            switch self {
+            case .happy:
+                ["happy", "joy", "hello", "play", "glad to see you", "pleasure", "wonderful", "home"]
+            case .sad:
+                ["alone", "sad", "bye", "sleep", "missing you", "lonely"]
+            case .angry:
+                ["angry", "mad", "scared", "bark", "growl", "hate"]
+            case .hungry:
+                ["hungry", "eat", "food"]
+            case .defaultEmotion:
+                []
+            }
+        }
+    }
+    
     var icon: Image {
         switch self {
         case .cat:

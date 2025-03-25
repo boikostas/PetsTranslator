@@ -20,7 +20,10 @@ struct TranslatorScreenView: View {
         .foregroundStyle(.appTint)
         .padding(.vertical, 12)
         .padding(.bottom, 120)
-        .animation(.easeInOut, value: viewModel.selectedPet)
+        .animation(.easeInOut, value: viewModel.screenState)
+        .animation(.easeInOut, value: viewModel.isRecording)
+        .animation(.easeInOut, value: viewModel.transcriptioError)
+        .animation(.smooth(duration: 0.1), value: viewModel.selectedPet)
         .animation(.smooth(duration: 0.1), value: viewModel.translateFrom)
         .alert("Enable Microphone Access", isPresented: $viewModel.isMicrophoneAccessDenied) {
             Button("Cancel") {}
@@ -69,20 +72,27 @@ struct TranslatorScreenView: View {
     private var resultView: some View {
         VStack {
             resultTitle
-            resultTextSection
+            if viewModel.translateFrom == .pet {
+                resultTextSection
+            } else if viewModel.translateFrom == .human {
+                resultSoundSection
+            }
             Spacer()
         }
     }
     
     private var resultTitle: some View {
-        Button {
-            viewModel.screenState = .translator
-        } label: {
-            ZStack {
-                Text("Result")
-                    .font(.customTitle)
-                
-                HStack {
+        ZStack {
+            Text("Result")
+                .font(.customTitle)
+            
+            HStack {
+                Button {
+                    viewModel.stopAudioPlayer()
+                    viewModel.soundToPlayName = nil
+                    viewModel.transcriptioError = nil
+                    viewModel.screenState = .translator
+                } label: {
                     ZStack {
                         RoundedRectangle(cornerRadius: .infinity)
                             .fill(.white)
@@ -91,13 +101,52 @@ struct TranslatorScreenView: View {
                             .resizable()
                             .frame(width: 28, height: 28)
                     }
-                    Spacer()
                 }
+                Spacer()
             }
-            .frame(height: 58)
-            .padding(.horizontal, 20)
-            .padding(.bottom, 90)
         }
+        .frame(height: 58)
+        .padding(.horizontal, 20)
+        .padding(.bottom, 90)
+        
+    }
+    
+    private var resultSoundSection: some View {
+        VStack(spacing: 20) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.purpleTileBackground)
+                
+                Text(viewModel.translatedText)
+                    .font(.customSmall)
+                    .padding(20)
+            }
+            .shadow(color: .black.opacity(0.15), radius: 5, y: 4)
+            .frame(height: 150)
+            
+            Button {
+                if let soundName = viewModel.soundToPlayName {
+                    viewModel.playSound(soundName)
+                }
+            } label: {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(.purpleTileBackground)
+                        .frame(height: 50)
+                    
+                    HStack(spacing: 10) {
+                        Image(.repeatIcon)
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                        Text("Repeat")
+                            .font(.customSmall)
+                    }
+                    .padding(.horizontal, 20)
+                }
+                .shadow(color: .black.opacity(0.15), radius: 5, y: 4)
+            }
+        }
+        .padding(.horizontal, 50)
     }
     
     private var resultTextSection: some View {
@@ -150,6 +199,7 @@ struct TranslatorScreenView: View {
         }
         .font(.customMedium)
         .padding(.top, 12)
+        .disabled(viewModel.isRecording)
     }
     
     private var speakSection: some View {
@@ -157,7 +207,19 @@ struct TranslatorScreenView: View {
             Button {
                 viewModel.requestMicrophoneAccess()
                 if !viewModel.isMicrophoneAccessDenied {
-                    viewModel.startListening()
+                    if viewModel.translateFrom == .pet {
+                        if viewModel.isRecording {
+                            viewModel.stopListeningForPetSounds()
+                        } else {
+                            viewModel.startListeningForPetSound()
+                        }
+                    } else if viewModel.translateFrom == .human {
+                        if viewModel.isRecording {
+                            viewModel.stopRecordingHumanSpeech()
+                        } else {
+                            viewModel.startRecordingHumanSpeech()
+                        }
+                    }
                 }
             } label: {
                 ZStack(alignment: .bottom) {
@@ -179,8 +241,25 @@ struct TranslatorScreenView: View {
                                 .frame(width: 70, height: 70)
                         }
                         
-                        Text(viewModel.isRecording ? "Recording..." : "Start Speak")
-                            .font(.customMedium)
+                        VStack {
+                            Text(viewModel.isRecording  ? (viewModel.translateFrom == .human ? "Recording..." : "Listening...") : (viewModel.translateFrom == .human ? "Start Speak" : "Start Listen"))
+                                .font(.customMedium)
+                            
+                            if viewModel.translateFrom == .human && viewModel.isRecording {
+                                Text("Tap to Stop Recording")
+                                    .font(.customSmall)
+                            } else if viewModel.translateFrom == .pet && viewModel.isRecording {
+                                Text("Tap to Stop Listening")
+                                    .font(.customSmall)
+                            }
+                            
+                            if let error = viewModel.transcriptioError {
+                                Text(error.rawValue)
+                                    .font(.customSmall)
+                                    .foregroundStyle(.red)
+                                
+                            }
+                        }
                     }
                     .clipped()
                     .padding(.bottom, 12)
@@ -211,7 +290,8 @@ struct TranslatorScreenView: View {
                 .padding(.vertical, 12)
                 .padding(.horizontal, 18.5)
             }
-                .frame(width: 107)
+            .frame(width: 107)
+            .disabled(viewModel.isRecording)
             
         }
         .frame(height: 176)

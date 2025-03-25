@@ -9,7 +9,7 @@ import Foundation
 import AVFoundation
 import SoundAnalysis
 
-class SoundClassifier: NSObject, SNResultsObserving, ObservableObject {
+class SoundClassifier: NSObject, SNResultsObserving {
     
     private let audioEngine = AVAudioEngine()
     private var streamAnalyzer: SNAudioStreamAnalyzer?

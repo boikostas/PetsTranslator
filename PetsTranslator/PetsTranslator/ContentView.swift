@@ -27,7 +27,7 @@ struct ContentView: View {
         }
         .overlay(alignment: .bottom) {
             TabBarView(selectedTab: $selectedTab)
-                .opacity(translatorViewModel.screenState == .result ? 0 : 1)
+                .opacity(translatorViewModel.screenState == .translator ? 1 : 0)
         }
     }
 }
