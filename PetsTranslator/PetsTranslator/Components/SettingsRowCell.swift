@@ -18,6 +18,7 @@ struct SettingsRowCell: View {
             HStack {
                 Text(rowType.rawValue)
                     .font(.customMedium)
+                    .foregroundStyle(.appTint)
                 Spacer()
                 Image(.arrowRightIcon)
                     .resizable()
