@@ -55,8 +55,8 @@ struct SettingsScreenView: View {
     private func buildSheetView(_ sheet: SettingsRowType) -> some View {
         switch sheet {
         case .rateUs:
-            Text("Rate")
-                .presentationDetents([.height(100)])
+            RateUsScreenView()
+                .presentationDetents([.medium])
         case .shareApp:
             EmptyView()
         case .contactUs:
