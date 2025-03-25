@@ -35,7 +35,7 @@ struct SettingsScreenView: View {
         VStack(spacing: 14) {
             ForEach(SettingsRowType.allCases) { rowType in
                 if rowType == .shareApp {
-                    if let url = URL(string: "https://github.com/boikostas/PetsTranslator") {
+                    if let url = URL(string: Constants.Url.gitHubAppUrlString) {
                         ShareLink(item: url) {
                             SettingsRowCell(rowType: rowType)
                         }

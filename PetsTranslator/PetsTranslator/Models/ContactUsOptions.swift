@@ -15,11 +15,11 @@ enum ContactUsOptions: String, CaseIterable, Identifiable {
     var url: URL {
         switch self {
         case .gmail:
-            URL(string: "mailto:boikostas3@gmail.com")!
+            URL(string: Constants.Url.gmailUrlString)!
         case .linkedIn:
-            URL(string: "https://www.linkedin.com/in/stas-boiko/")!
+            URL(string: Constants.Url.linkedInUrlString)!
         case .gitHub:
-            URL(string: "https://github.com/boikostas")!
+            URL(string: Constants.Url.gitHubProfileUrlString)!
         }
     }
     

@@ -153,7 +153,7 @@ struct TermsOfUseScreenView: View {
                 For any questions regarding these Terms, please contact us at:
                 """)
             
-            Link("boikostas3@gmail.com", destination: URL(string: "boikostas3@gmail.com")!)
+            Link("boikostas3@gmail.com", destination: URL(string: Constants.Url.gmailUrlString)!)
                 .padding(.bottom, 20)
         }
         .padding(.horizontal, 20)
