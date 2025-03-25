@@ -150,6 +150,7 @@ struct TranslatorScreenView: View {
         }
         .font(.customMedium)
         .padding(.top, 12)
+        .disabled(viewModel.isRecording)
     }
     
     private var speakSection: some View {
@@ -158,7 +159,17 @@ struct TranslatorScreenView: View {
                 viewModel.requestMicrophoneAccess()
                 if !viewModel.isMicrophoneAccessDenied {
                     if viewModel.translateFrom == .pet {
-                        viewModel.startListeningForPetSound()
+                        if viewModel.isRecording {
+                            viewModel.stopListeningForPetSounds()
+                        } else {
+                            viewModel.startListeningForPetSound()
+                        }
+                    } else if viewModel.translateFrom == .human {
+                        if viewModel.isRecording {
+                            viewModel.stopRecordingHumanSpeech()
+                        } else {
+                            viewModel.startRecordingHumanSpeech()
+                        }
                     }
                 }
             } label: {
@@ -181,8 +192,18 @@ struct TranslatorScreenView: View {
                                 .frame(width: 70, height: 70)
                         }
                         
-                        Text(viewModel.isRecording  ? (viewModel.translateFrom == .human ? "Recording..." : "Listening...") : (viewModel.translateFrom == .human ? "Start Speak" : "Start Listen"))
-                            .font(.customMedium)
+                        VStack {
+                            Text(viewModel.isRecording  ? (viewModel.translateFrom == .human ? "Recording..." : "Listening...") : (viewModel.translateFrom == .human ? "Start Speak" : "Start Listen"))
+                                .font(.customMedium)
+                            
+                            if viewModel.translateFrom == .human && viewModel.isRecording {
+                                Text("Tap to Stop Recording")
+                                    .font(.customSmall)
+                            } else if viewModel.translateFrom == .pet && viewModel.isRecording {
+                                Text("Tap to Stop Listening")
+                                    .font(.customSmall)
+                            }
+                        }
                     }
                     .clipped()
                     .padding(.bottom, 12)
@@ -213,7 +234,8 @@ struct TranslatorScreenView: View {
                 .padding(.vertical, 12)
                 .padding(.horizontal, 18.5)
             }
-                .frame(width: 107)
+            .frame(width: 107)
+            .disabled(viewModel.isRecording)
             
         }
         .frame(height: 176)

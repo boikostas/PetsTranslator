@@ -21,9 +21,27 @@ class TranslatorViewModel: ObservableObject {
     @Published var translatedText = ""
     
     let soundClassifier = SoundClassifier()
+    let audioRecorder = AudioRecorder()
     
     init() {
         listenForPetDetection()
+        listenForRecordedUrl()
+    }
+    
+    func startRecordingHumanSpeech() {
+        isRecording = true
+        audioRecorder.startRecording()
+    }
+    
+    func stopRecordingHumanSpeech() {
+        isRecording = false
+        audioRecorder.stopRecording()
+    }
+    
+    private func listenForRecordedUrl() {
+        audioRecorder.recordedUrl = { [weak self] url in
+            
+        }
     }
     
     func startListeningForPetSound() {
